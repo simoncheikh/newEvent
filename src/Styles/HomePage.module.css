@@ -1,0 +1,55 @@
+/* HomePage.module.css */
+body {
+  background-color: #dee6e8;
+}
+.bodyHomePage {
+  padding: 1%;
+}
+.titleEvent {
+  font-weight: bold;
+  font-size: 40px;
+}
+.mainImage {
+  display: flex;
+  justify-content: center;
+}
+.imageView {
+  border-radius: 427px;
+  width: 100%;
+  height: 34em;
+}
+.concertTitle {
+  border-bottom: black solid 1px;
+  font-size: 40px;
+  font-weight: bold;
+  width: max-content;
+}
+.mainEventDate {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2%;
+}
+.mainDate {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 5px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.ticketButtons {
+  border-radius: 20px;
+  background-color: black;
+  border: black 0.5px solid;
+}
+.ticketButtons:hover {
+  background-color: #dee6e8;
+  color: black;
+  border: black 0.5px solid;
+}
+.mainSponsor {
+  background-color: black;
+  display: flex;
+  justify-content: space-between;
+  padding: 2%;
+  margin-top: 2%;
+}

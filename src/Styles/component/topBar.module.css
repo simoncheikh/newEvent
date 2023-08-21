@@ -1,0 +1,33 @@
+/* topBar.module.css */
+.mainTopBar{
+    background-color: #DEE6E8;
+    padding: 15px;
+}
+.menuButtons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.buttonName{
+    font-weight: bold;
+    cursor: pointer;
+}
+.buttonBar{
+    display: flex;
+    gap: 200px;
+    flex-direction: row;
+    border-bottom: #DEE6E8 solid .5px;
+}
+.buttonName:hover{
+    border-bottom: black solid .5px;
+}
+.contactButton{
+    border-radius: 20px;
+    background-color: black;
+    border: black .5px solid;
+}
+.contactButton:hover{
+    background-color: #DEE6E8;
+    color:black;
+    border: black .5px solid;
+}
