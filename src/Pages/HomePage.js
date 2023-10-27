@@ -4,16 +4,18 @@ import styles from "../Styles/HomePage.module.css";
 
 export const HomePage = () => {
   return (
-    <div className={styles.mainPage}>
-      <TopBar />
-      <div className={styles.bodyHomePage}>
-        <div className={styles.titleEvent}>Today's Event</div>
-        <div className={styles.mainImage}>
-          <img
-            src={require("../assets/The Weeknd.jpg")}
-            className={styles.imageView}
-          />
-        </div>
+    <div className={styles.mainPageContainer}>
+      <div className={styles.TopBarPosition}>
+        <TopBar />
+      </div>
+      <div className={styles.imageContainer}>
+        <div className={styles.overlay}></div>
+        <img
+          src={require("../assets/Party.jpg")}
+          className={styles.imageView}
+        />
+      </div>
+      <div className={styles.eventDescription}>
         <div className={styles.concertTitle}>The Weeknd's Concert</div>
         <div className={styles.mainEventDate}>
           <div className={styles.mainDate}>
@@ -29,14 +31,24 @@ export const HomePage = () => {
             <div>Lebanon-Beirut-Downtown</div>
           </div>
         </div>
-        <Button variant="contained" className={styles.ticketsButton}>
-          Book Your Ticket
-        </Button>
-        <div className={styles.mainSponsor}>
-          <img src={require("../assets/beirut beer.png")} />
-          <img src={require("../assets/mtv.jpg")} />
-          <img src={require("../assets/xxl.jpg")}  />
+        <div>
+          <div className={styles.ticketButton}>Book Your Ticket</div>
         </div>
+      </div>
+
+      <div className={styles.mainSponsor}>
+        <img
+          src={require("../assets/beirut beer.png")}
+          className={styles.sponsorImage}
+        />
+        <img
+          src={require("../assets/mtv.jpg")}
+          className={styles.sponsorImage}
+        />
+        <img
+          src={require("../assets/xxl.jpg")}
+          className={styles.sponsorImage}
+        />
       </div>
     </div>
   );

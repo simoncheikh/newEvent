@@ -1,29 +1,85 @@
 /* HomePage.module.css */
-body {
-  background-color: #dee6e8;
+
+body,
+html {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
-.bodyHomePage {
-  padding: 1%;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Adjust the last value to change the overlay's opacity */
+  z-index: -1;
 }
+
+.imageContainer {
+  height: 81vh;
+  z-index: 0;
+  position: relative; /* Add this line to make the ::before pseudo-element work */
+}
+
+.imageView {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: black;
+}
+
+.imageContainer::before {
+  content: ''; /* This creates a pseudo-element for the imageContainer */
+  position: absolute;
+  inset: 0;
+  background: transparent; /* Adjust the opacity here */
+}
+
+.concertTitle {
+  font-size: 40px;
+  font-weight: bold;
+  width: max-content;
+  color: white;
+}
+
+
 .titleEvent {
   font-weight: bold;
   font-size: 40px;
 }
-.mainImage {
-  display: flex;
-  justify-content: center;
+
+.TopBarPosition {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  /* background-color: #161855; */
+}
+/* .imageContainer {
+  height: 81vh;
+  z-index: -1;
 }
 .imageView {
-  border-radius: 427px;
   width: 100%;
-  height: 34em;
-}
-.concertTitle {
-  border-bottom: black solid 1px;
+  height: 100%;
+  position: relative;
+  /* opacity: 0.4; */
+  /* background-color: black; */
+/* } */
+/* .imageView::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+} */ 
+
+/* .concertTitle {
   font-size: 40px;
   font-weight: bold;
   width: max-content;
-}
+  color: white;
+} */
 .mainEventDate {
   display: flex;
   justify-content: space-between;
@@ -35,21 +91,40 @@ body {
   gap: 5px;
   font-size: 24px;
   font-weight: bold;
+  color: white;
 }
-.ticketButtons {
+.ticketButton {
   border-radius: 20px;
-  background-color: black;
-  border: black 0.5px solid;
+  background-color: transparent;
+  border: transparent 0.5px solid;
+  width: fit-content;
+  color: white;
+  border: white 2px solid;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: large;
+  transition: 200ms;
+  padding: 0.5%;
 }
-.ticketButtons:hover {
-  background-color: #dee6e8;
-  color: black;
-  border: black 0.5px solid;
+.ticketButton:hover {
+  border: white 2px solid;
+  background-color: white;
+  color: #161855;
 }
 .mainSponsor {
-  background-color: black;
+  background-color: #161855;
   display: flex;
   justify-content: space-between;
   padding: 2%;
-  margin-top: 2%;
+}
+.eventDescription {
+  position: absolute;
+  z-index: 10;
+  top: 56%;
+  width: 90%;
+  padding-left: 1%;
+  isolation: isolate;
+}
+.sponsorImage {
+  height: 10.6vh;
 }

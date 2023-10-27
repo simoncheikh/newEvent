@@ -1,33 +1,43 @@
 /* topBar.module.css */
-.mainTopBar{
-    background-color: #DEE6E8;
-    padding: 15px;
+.mainTopBar {
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1%;
+  opacity: 10;
 }
-.menuButtons{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.menuButtons {
+  display: flex;
 }
-.buttonName{
-    font-weight: bold;
-    cursor: pointer;
+.buttonName {
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  opacity: 1;
+  z-index: 1;
+  transition: 100ms;
 }
-.buttonBar{
-    display: flex;
-    gap: 200px;
-    flex-direction: row;
-    border-bottom: #DEE6E8 solid .5px;
+.buttonBar {
+  display: flex;
+  gap: 200px;
+  flex-direction: row;
+  border-bottom: transparent solid 0.5px;
 }
-.buttonName:hover{
-    border-bottom: black solid .5px;
+.buttonName:hover {
+  border-bottom: white solid 0.5px;
 }
-.contactButton{
-    border-radius: 20px;
-    background-color: black;
-    border: black .5px solid;
+.contactButton {
+  border-bottom: transparent 0.5px solid;
+  color: white;
+  cursor: pointer;
+  width: 82px;
+  font-weight: bold;
 }
-.contactButton:hover{
-    background-color: #DEE6E8;
-    color:black;
-    border: black .5px solid;
+.contactButton:hover {
+  border-bottom: white 0.5px solid;
 }
+.linkStyle {
+    text-decoration: none; 
+    color: inherit; 
+  }
