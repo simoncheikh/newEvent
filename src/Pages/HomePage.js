@@ -1,17 +1,32 @@
 import { Button } from "@mui/material";
 import { TopBar } from "../Components/TopBar";
 import styles from "../Styles/HomePage.module.css";
+import { useEffect, useState } from "react";
 
 export const HomePage = () => {
+  const images = [
+    require("../assets/POSTER.jpeg"),
+    require("../assets/Party.jpg"),
+    require("../assets/The Weeknd.jpg"),
+  ];
+  const [currentImage, setCurrentImage] = useState(null);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+        setCurrentImage(images[Math.floor(Math.random() * images.length)]);
+    }, 5000)
+    
+    return () => clearInterval(intervalId);
+}, [])
+  
   return (
     <div className={styles.mainPageContainer}>
       <div className={styles.TopBarPosition}>
         <TopBar />
       </div>
       <div className={styles.imageContainer}>
-        <div className={styles.overlay}></div>
         <img
-          src={require("../assets/Party.jpg")}
+          src={currentImage}
           className={styles.imageView}
         />
       </div>

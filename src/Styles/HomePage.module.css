@@ -29,6 +29,8 @@ html {
   height: 100%;
   position: relative;
   background-color: black;
+  object-fit: contain;
+
 }
 
 .imageContainer::before {
@@ -43,47 +45,27 @@ html {
   font-weight: bold;
   width: max-content;
   color: white;
+  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
 }
 
 
 .titleEvent {
   font-weight: bold;
   font-size: 40px;
+
 }
 
 .TopBarPosition {
   position: absolute;
   z-index: 1;
   width: 100%;
-  /* background-color: #161855; */
 }
-/* .imageContainer {
-  height: 81vh;
-  z-index: -1;
-}
-.imageView {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  /* opacity: 0.4; */
-  /* background-color: black; */
-/* } */
-/* .imageView::before{
-  content: '';
-  position: absolute;
-  inset: 0;
-} */ 
 
-/* .concertTitle {
-  font-size: 40px;
-  font-weight: bold;
-  width: max-content;
-  color: white;
-} */
 .mainEventDate {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2%;
+
 }
 .mainDate {
   display: flex;
@@ -91,7 +73,8 @@ html {
   gap: 5px;
   font-size: 24px;
   font-weight: bold;
-  color: white;
+  color: rgb(242, 231, 231);
+  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
 }
 .ticketButton {
   border-radius: 20px;
@@ -105,11 +88,14 @@ html {
   font-size: large;
   transition: 200ms;
   padding: 0.5%;
+  box-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
 }
 .ticketButton:hover {
   border: white 2px solid;
   background-color: white;
   color: #161855;
+  text-shadow: none;
 }
 .mainSponsor {
   background-color: #161855;
