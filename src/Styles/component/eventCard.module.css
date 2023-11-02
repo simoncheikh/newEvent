@@ -1,0 +1,64 @@
+/* eventCard.module.css */
+body {
+  font-family: Neue Plak, -apple-system, BlinkMacSystemFont, Roboto,
+    Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
+}
+.mainEventCard {
+  width: 25%;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  transition: 100ms;
+  box-shadow: 0.5px 1px 5px #000;
+}
+.mainEventCard:hover {
+  box-shadow: 1px 2px 9px #000;
+}
+
+.cardImage {
+  height: 25vh;
+  width: 100%;
+}
+.favoriteButton {
+  border: solid 0.5;
+  background-color: white;
+  box-shadow: 0.5px 1px 5px #000;
+}
+.favoriteButton:hover {
+  background-color: white;
+}
+.cardInformation {
+  padding: 4%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mainActionButton {
+  position: absolute;
+  bottom: 3%;
+  right: 2%;
+  z-index: 1;
+}
+.mainTitle {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  color: #39364f;
+  font-weight: bold;
+}
+
+.mainDate {
+  color: #d1410c;
+  font-weight: bold;
+}
+.mainLocation {
+  color: #6f7287;
+}
+.mainCharge{
+    color:#6f7287;
+}
+.mainTicketsLeft{
+    color:#6f7287;
+}

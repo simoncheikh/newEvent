@@ -1,6 +1,6 @@
 /* topBar.module.css */
 .mainTopBar {
-  background-color: transparent;
+  background-color: white;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -14,7 +14,7 @@
 .buttonName {
   font-weight: bold;
   cursor: pointer;
-  color: white;
+  color: #39364f;
   opacity: 1;
   z-index: 1;
   transition: 100ms;
@@ -24,14 +24,13 @@
   gap: 200px;
   flex-direction: row;
   border-bottom: transparent solid 0.5px;
-  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
 }
 .buttonName:hover {
   border-bottom: white solid 0.5px;
 }
 .contactButton {
   border-bottom: transparent 0.5px solid;
-  color: white;
+  color: #39364f;
   cursor: pointer;
   width: 82px;
   font-weight: bold;
@@ -41,6 +40,4 @@
 }
 .linkStyle {
   text-decoration: none;
-  color: inherit;
-  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
 }

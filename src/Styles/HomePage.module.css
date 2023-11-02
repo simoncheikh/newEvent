@@ -7,21 +7,33 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: Neue Plak, -apple-system, BlinkMacSystemFont, Roboto,
+  Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
 }
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+.TopBarPosition{
+  position: fixed;
+  z-index: 2;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2); /* Adjust the last value to change the overlay's opacity */
-  z-index: -1;
+  height: fit-content;
+}
+.imageDescriptionContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 94%;
+  margin-left: 2%;
+  margin-right: 2%;
+  align-items: center;
+  background-color: #161855;
+  padding: 1%;
 }
 
 .imageContainer {
-  height: 81vh;
-  z-index: 0;
-  position: relative; /* Add this line to make the ::before pseudo-element work */
+  height: 50vh;
+  width: 50%;
+}
+.eventDescription {
+  width: 50%;
 }
 
 .imageView {
@@ -29,43 +41,17 @@ html {
   height: 100%;
   position: relative;
   background-color: black;
-  object-fit: contain;
-
 }
-
-.imageContainer::before {
-  content: ''; /* This creates a pseudo-element for the imageContainer */
-  position: absolute;
-  inset: 0;
-  background: transparent; /* Adjust the opacity here */
-}
-
-.concertTitle {
-  font-size: 40px;
-  font-weight: bold;
-  width: max-content;
-  color: white;
-  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
-}
-
 
 .titleEvent {
-  font-weight: bold;
-  font-size: 40px;
-
+  color: white;
 }
 
-.TopBarPosition {
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-}
-
-.mainEventDate {
+.mainEventDescription {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2%;
-
+  color: whitesmoke;
 }
 .mainDate {
   display: flex;
@@ -73,8 +59,7 @@ html {
   gap: 5px;
   font-size: 24px;
   font-weight: bold;
-  color: rgb(242, 231, 231);
-  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+  color: #39364f;
 }
 .ticketButton {
   border-radius: 20px;
@@ -82,20 +67,35 @@ html {
   border: transparent 0.5px solid;
   width: fit-content;
   color: white;
-  border: white 2px solid;
+  border: #39364f 2px solid;
   cursor: pointer;
   font-weight: bold;
   font-size: large;
   transition: 200ms;
   padding: 0.5%;
-  box-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
-  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+  color: #39364f;
 }
 .ticketButton:hover {
-  border: white 2px solid;
+  border: #39364f 2px solid;
   background-color: white;
   color: #161855;
   text-shadow: none;
+}
+.mainPromotedCards{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 2%;
+}
+.promotedTitle{
+  color: #39364f;
+  font-weight: bold;
+  font-size: 30px;
+}
+.promotedCard{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 .mainSponsor {
   background-color: #161855;
@@ -103,14 +103,7 @@ html {
   justify-content: space-between;
   padding: 2%;
 }
-.eventDescription {
-  position: absolute;
-  z-index: 10;
-  top: 56%;
-  width: 90%;
-  padding-left: 1%;
-  isolation: isolate;
-}
+
 .sponsorImage {
   height: 10.6vh;
 }
