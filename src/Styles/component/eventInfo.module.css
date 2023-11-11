@@ -1,0 +1,50 @@
+/*eventInfo.module.css*/
+.mainEventInfo {
+  padding: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #161855;
+}
+.eventImage {
+  width: 100%;
+  height: 50vh;
+  border-radius: 20px;
+}
+.EventTitle {
+  color: white;
+  font-weight: bold;
+  font-size: 40px;
+}
+.EventPlace {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.EventTime {
+  color: white;
+  font-size: 20px;
+}
+.EventDescription {
+  color: white;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.description {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.location {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.locationMap {
+  border: 0;
+  border-radius: 20px;
+  width: 100%;
+  height: 50vh;
+}

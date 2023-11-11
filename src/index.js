@@ -5,6 +5,8 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { HomePage } from "./Pages/HomePage";
 import { EventPage } from "./Pages/EventPage";
+import { SignIn } from "./Components/SignIn";
+import { EventInfo } from "./Components/EventInfo";
 
 ReactDOM.render(
   <Router>
@@ -12,6 +14,8 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/event" element={<EventPage />} />
+        <Route path="/SignIn" element={<SignIn />} />
+        <Route path="/EventInfo" element={<EventInfo />} />
       </Routes>
     </React.StrictMode>
   </Router>,

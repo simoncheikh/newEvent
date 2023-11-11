@@ -1,4 +1,8 @@
 /* topBar.module.css */
+body{
+  font-family: Neue Plak, -apple-system, BlinkMacSystemFont, Roboto,
+  Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
+}
 .mainTopBar {
   background-color: white;
   display: flex;
@@ -26,18 +30,25 @@
   border-bottom: transparent solid 0.5px;
 }
 .buttonName:hover {
-  border-bottom: white solid 0.5px;
+  border-bottom: #39364f solid 0.5px;
 }
 .contactButton {
   border-bottom: transparent 0.5px solid;
   color: #39364f;
   cursor: pointer;
-  width: 82px;
   font-weight: bold;
 }
 .contactButton:hover {
-  border-bottom: white 0.5px solid;
+  border-bottom: #39364f 0.5px solid;
 }
 .linkStyle {
   text-decoration: none;
 }
+.sideBarStyle{
+  position: absolute;
+  height: 100vh;
+  left:0;
+  top: 0;
+  width:100%;
+}
+

@@ -1,0 +1,10 @@
+/*downBar.module.css*/
+.mainSponsor {
+  background-color: #161855;
+  display: flex;
+  justify-content: space-between;
+  padding: 2%;
+}
+.sponsorImage {
+  height: 10.6vh;
+}

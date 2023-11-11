@@ -1,25 +1,42 @@
 import styles from "../Styles/component/eventCard.module.css";
 import { IconButton } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { Link } from "react-router-dom";
 
-export const EventCard = () => {
+export const EventCard = ({
+  width,
+  title,
+  date,
+  status,
+  location,
+  fees,
+  tickets,
+  marginBottom,
+}) => {
   return (
-    <div className={styles.mainEventCard}>
+    <Link
+      to={"/EventInfo"}
+      className={styles.mainEventCard}
+      style={{ width: width, marginBottom: marginBottom }}
+    >
       <img src={require("../assets/Party.jpg")} className={styles.cardImage} />
       <div className={styles.mainActionButton}>
-        <IconButton className={styles.favoriteButton}>
+        <IconButton
+          className={styles.favoriteButton}
+          onClick={(e) => e.preventDefault()}
+        >
           <FavoriteBorderIcon />
         </IconButton>
       </div>
       <div className={styles.cardInformation}>
-        <div className={styles.mainTitle}>
-          VIRTUAL SOFTWARE DEVELOPMENT CONFERENCE
+        <div className={styles.mainTitle}>{title}</div>
+        <div className={styles.mainDate}>{date}</div>
+        <div className={styles.mainLocation}>
+          {status} • {location}
         </div>
-        <div className={styles.mainDate}>Wed, Nov 15, 10:00 AM</div>
-        <div className={styles.mainLocation}>Online • Beirut, 98000</div>
-        <div className={styles.mainCharge}>Free</div>
-        <div className={styles.mainTicketsLeft}>10 Tickets Left</div>
+        <div className={styles.mainCharge}>{fees}</div>
+        <div className={styles.mainTicketsLeft}>{tickets}</div>
       </div>
-    </div>
+    </Link>
   );
 };

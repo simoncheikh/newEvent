@@ -95,15 +95,23 @@ html {
 .promotedCard{
   display: flex;
   flex-direction: row;
-  gap: 10px;
-}
-.mainSponsor {
-  background-color: #161855;
-  display: flex;
-  justify-content: space-between;
-  padding: 2%;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  margin: 0 15px;
+  /* gap: 30px;
+  align-items: center;
+  margin-bottom: 2%; */
+  width: 100%;
+
 }
 
-.sponsorImage {
-  height: 10.6vh;
+
+.arrowBackStyle{
+  height: 6vh;
+  box-shadow: 0.5px .5px 2px #000;
+}
+.arrowForwardStyle{
+  height:6vh;
+  box-shadow: 0.5px .5px 2px #000;
 }

@@ -1,0 +1,17 @@
+/* searchInput.module.css */
+.main {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.search {
+  width: 100%;
+}
+.listSearchStyle{
+    position: absolute;
+    z-index: 1;
+    width: 38.3%;
+    background-color: white;
+}
+
