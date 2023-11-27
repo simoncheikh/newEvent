@@ -1,0 +1,65 @@
+/*addEvent.module.css*/
+.mainAddEvent {
+  padding: 2%;
+}
+.addEventActions {
+  display: flex;
+  width: 100%;
+  gap: 2%;
+}
+.mainOverview {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 10px;
+}
+.overview {
+  color: #39364f;
+}
+.overviewActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.scheduling {
+  color: #39364f;
+}
+.mainScheduling {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 10px;
+}
+.payments {
+  color: #39364f;
+}
+.mainPayment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.paymentRow {
+  display: flex;
+  gap: 10px;
+}
+.paymentInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.createBtn{
+  display: flex;
+  justify-content: end;
+}
+.topBarStyle{
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: fit-content;
+}
+.note{
+  color:red;
+  font-size: small;
+  display: flex;
+  justify-content: end;
+}

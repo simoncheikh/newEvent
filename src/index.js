@@ -7,6 +7,7 @@ import { HomePage } from "./Pages/HomePage";
 import { EventPage } from "./Pages/EventPage";
 import { SignIn } from "./Components/SignIn";
 import { EventInfo } from "./Components/EventInfo";
+import { AddEvent } from "./Pages/AddEvent";
 
 ReactDOM.render(
   <Router>
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Route path="/event" element={<EventPage />} />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/EventInfo" element={<EventInfo />} />
+        <Route path="/AddEvent" element={<AddEvent />} />
       </Routes>
     </React.StrictMode>
   </Router>,

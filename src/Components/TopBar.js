@@ -47,8 +47,8 @@ export const TopBar = () => {
           <Link to="/event" className={styles.linkStyle}>
             <div className={styles.buttonName}>Events</div>
           </Link>
-          <Link to="/event" className={styles.linkStyle}>
-            <div className={styles.buttonName}>Add Events</div>
+          <Link to="/AddEvent" className={styles.linkStyle}>
+            <div className={styles.buttonName}>Create Events</div>
           </Link>
         </div>
       </div>

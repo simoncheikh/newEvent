@@ -19,11 +19,18 @@ export const SideMenu = ({ openSpaceDiv, wideSpaceOnClick }) => {
               <img src={require("../assets/profile.png")} />
               <div>Simon Al Cheikh</div>
             </div>
-            <div className={styles.actionButton}>Profile</div>
+            <Link to="/SignIn" className={styles.linkStyle}>
+              <div className={styles.actionButton}>Profile</div>
+            </Link>
             <Link to="/SignIn" className={styles.linkStyle}>
               <div className={styles.actionButton}>Sign In</div>
             </Link>
-            <div className={styles.actionButton}>Privacy and condition</div>
+            <Link to="/SignIn" className={styles.linkStyle}>
+              <div className={styles.actionButton}>Cart</div>
+            </Link>
+            <Link to="/SignIn" className={styles.linkStyle}>
+              <div className={styles.actionButton}>Privacy and condition</div>
+            </Link>
           </div>
           <div className={styles.sideMenuBottom}>
             <div className={styles.actionButton}>Logout</div>

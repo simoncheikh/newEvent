@@ -6,12 +6,13 @@
 }
 
 .search {
-  width: 100%;
+  width: 43.5%;
 }
 .listSearchStyle{
     position: absolute;
     z-index: 1;
     width: 38.3%;
     background-color: white;
+    z-index: 10;
 }
 
