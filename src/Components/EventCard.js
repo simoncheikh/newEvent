@@ -12,19 +12,21 @@ export const EventCard = ({
   fees,
   tickets,
   marginBottom,
+  height,
+  data,
+  image,
+  onClick,
 }) => {
   return (
     <Link
       to={"/EventInfo"}
       className={styles.mainEventCard}
-      style={{ width: width, marginBottom: marginBottom }}
+      style={{ width: width, marginBottom: marginBottom, height }}
+      state={data}
     >
-      <img src={require("../assets/Party.jpg")} className={styles.cardImage} />
+      <img src={image} className={styles.cardImage} />
       <div className={styles.mainActionButton}>
-        <IconButton
-          className={styles.favoriteButton}
-          onClick={(e) => e.preventDefault()}
-        >
+        <IconButton className={styles.favoriteButton} onClick={onClick}>
           <FavoriteBorderIcon />
         </IconButton>
       </div>

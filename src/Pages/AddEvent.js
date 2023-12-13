@@ -8,14 +8,14 @@ import TextField from "@mui/material/TextField";
 import { Box, Button, Grid, Paper, Alert } from "@mui/material";
 import { Warning } from "../Components/Warning";
 import AlertDialog from "../Components/Dialog";
+import InputFile from "../Components/InputFile";
 
 export const AddEvent = () => {
-  const [paymentOptions, setPaymentOptions] = useState([]);
-  const [monthOptions, setMonthOptions] = useState([]);
-  const [yearOptions, setYearOptions] = useState([]);
   const [paymentInput, setPaymenInput] = useState([]);
-  const [closeWarning, setCloseWarning] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [warningText, setWarningText] = useState({});
+  const [reqImage, setReqImage] = useState([]);
 
   const paymentMethods = [
     { value: 1, label: "Visa Card" },
@@ -52,70 +52,220 @@ export const AddEvent = () => {
     { value: 12, label: "2034" },
   ];
 
+  const createEvent = async () => {
+    try {
+      const date = new Date(paymentInput?.eventDate);
+      const formattedDate = date.toISOString().split("T")[0];
+      const formattedTime = new Date(paymentInput.eventTime).toLocaleTimeString(
+        [],
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }
+      );
+      const formData = new FormData();
+
+      Object.entries(paymentInput).forEach(([key, value]) => {
+        if (key !== "eventDate" && key !== "eventTime") {
+          formData.append(key, value);
+        }
+      });
+
+      formData.append("eventDate", formattedDate);
+      formData.append("eventTime", formattedTime);
+
+      Object.entries(reqImage).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      const response = await fetch(
+        "http://localhost:3001/addevents/createEvent",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setWarningText({
+        severity: "success",
+        label: "Event inserted successfully",
+      });
+    } catch (error) {
+      setWarningText({ severity: "error", label: error.message });
+    }
+    setShowAlert(true);
+    setOpenDialog(false);
+    setPaymenInput([]);
+  };
+
   return (
     <div>
       <div className={styles.topBarStyle}>
         <TopBar />
+        <Warning
+          onClick={() => setShowAlert(false)}
+          collapseIn={showAlert}
+          alertProps={warningText}
+        />
       </div>
       <br />
       <br />
       <br />
-      <Warning
-        onClick={() => setCloseWarning(false)}
-        collapseIn={closeWarning}
-      />
       <div className={styles.mainAddEvent}>
         <h1>Create Event</h1>
         <div className={styles.addEventActions}>
           <div className={styles.mainOverview}>
             <h3 className={styles.overview}>Overview</h3>
-            <TextField label="Event Name" />
-            <TextField label="Event Description" />
-            <Dropdown placeholder={"Cities"} />
-            <TextField label="Event Location" />
-            <TextField label="Event Link Location" />
-            <Dropdown placeholder={"Visibilities"} />
+            <TextField
+              label="Event Name"
+              onChange={(value) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventName: value.target.value,
+                })
+              }
+              value={paymentInput.eventName || ""}
+            />
+            <TextField
+              label="Event Description"
+              onChange={(value) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventDesc: value.target.value,
+                })
+              }
+              value={paymentInput.eventDesc || ""}
+            />
+            <TextField
+              label="Event Location"
+              onChange={(value) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventLocation: value.target.value,
+                })
+              }
+              value={paymentInput.eventLocation || ""}
+            />
+            <TextField
+              label="Event Link Location"
+              onChange={(value) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventLocationLink: value.target.value,
+                })
+              }
+              value={paymentInput.eventLocationLink || ""}
+            />
+            <TextField
+              label="Number of Tickets"
+              onChange={(value) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventTicket: value.target.value,
+                })
+              }
+              value={paymentInput.eventTicket || ""}
+            />
+            <TextField
+              label="Ticket Price"
+              onChange={(value) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventPrice: value.target.value,
+                })
+              }
+              value={paymentInput.eventPrice || ""}
+            />
+            <InputFile
+              onChange={(event) => {
+                const file = event.target.files[0];
+                if (file) {
+                  setReqImage({
+                    ...reqImage,
+                    eventImage: file,
+                  });
+                }
+              }}
+              fileName={reqImage.eventImage?.name || ""}
+            />
           </div>
           <div className={styles.mainScheduling}>
             <h3 className={styles.scheduling}>Scheduling</h3>
-            <BasicDatePicker placeholder={"Pick a Date"} />
-            <BasicTimePicker placeholder={"Pick a Time"} />
+            <BasicDatePicker
+              placeholder={"Pick a Date"}
+              onChange={(value) =>
+                setPaymenInput({ ...paymentInput, eventDate: value })
+              }
+              value={paymentInput.eventDate}
+            />
+            <BasicTimePicker
+              placeholder={"Pick a Time"}
+              onChange={(event) =>
+                setPaymenInput({
+                  ...paymentInput,
+                  eventTime: event,
+                })
+              }
+              value={paymentInput.eventTime}
+            />
+
             <div className={styles.mainPayment}>
               <h3 className={styles.payments}>Payments</h3>
               <Dropdown
                 options={paymentMethods}
-                onChange={(e) => setPaymentOptions(e)}
+                onChange={(value) =>
+                  setPaymenInput({
+                    ...paymentInput,
+                    paymentType: value,
+                  })
+                }
+                value={paymentInput.paymentType}
                 nullable
                 placeholder={"Payment Methods"}
-                value={paymentOptions || ""}
               />
-              {paymentOptions == "" ? null : (
+              {paymentInput.paymentType ? (
                 <div className={styles.paymentInputs}>
                   <TextField
                     label="Card Number"
                     onChange={(value) =>
                       setPaymenInput({
                         ...paymentInput,
-                        CardNumber: value.target.value,
+                        cardNumber: value.target.value,
                       })
                     }
-                    value={paymentInput.CardNumber || ""}
+                    value={paymentInput.cardNumber || ""}
                   />
                   <div className={styles.paymentRow}>
                     <Dropdown
                       options={months}
-                      onChange={(e) => setMonthOptions(e)}
+                      onChange={(value) =>
+                        setPaymenInput({
+                          ...paymentInput,
+                          cardMonth: value,
+                        })
+                      }
+                      value={paymentInput.cardMonth}
                       nullable
                       placeholder={"Month"}
-                      value={monthOptions || ""}
                     />
 
                     <Dropdown
                       options={years}
-                      onChange={(e) => setYearOptions(e)}
+                      onChange={(value) =>
+                        setPaymenInput({
+                          ...paymentInput,
+                          cardYear: value,
+                        })
+                      }
+                      value={paymentInput.cardYear}
                       nullable
                       placeholder={"Year"}
-                      value={yearOptions || ""}
                     />
                   </div>
 
@@ -124,23 +274,23 @@ export const AddEvent = () => {
                     onChange={(value) =>
                       setPaymenInput({
                         ...paymentInput,
-                        CardHolder: value.target.value,
+                        cardHolder: value.target.value,
                       })
                     }
-                    value={paymentInput.CardHolder || ""}
+                    value={paymentInput.cardHolder || ""}
                   />
                   <TextField
                     label="CVV2 Security Code"
                     onChange={(value) =>
                       setPaymenInput({
                         ...paymentInput,
-                        security: value.target.value,
+                        cvv2: value.target.value,
                       })
                     }
-                    value={paymentInput.security || ""}
+                    value={paymentInput.cvv2 || ""}
                   />
                 </div>
-              )}
+              ) : null}
               <div className={styles.createBtn}>
                 <Button
                   variant="contained"
@@ -162,6 +312,7 @@ export const AddEvent = () => {
                 CloseOnClick={() => setOpenDialog(false)}
                 acceptLabel={"Accept"}
                 closeLabel={"Cancel"}
+                AcceptOnClick={createEvent}
               />
             </div>
           </div>

@@ -3,7 +3,12 @@ import styles from "../Styles/component/sideMenu.module.css";
 import { ClassNames } from "@emotion/react";
 import { Link } from "react-router-dom";
 
-export const SideMenu = ({ openSpaceDiv, wideSpaceOnClick }) => {
+export const SideMenu = ({
+  openSpaceDiv,
+  wideSpaceOnClick,
+  closeSignIn = true,
+  userName
+}) => {
   return (
     <div className={styles.mainSideBar}>
       <div className={styles.leftSpaceStyle}>
@@ -17,20 +22,22 @@ export const SideMenu = ({ openSpaceDiv, wideSpaceOnClick }) => {
           <div className={styles.actionSideMenu}>
             <div className={styles.userNameContainer}>
               <img src={require("../assets/profile.png")} />
-              <div>Simon Al Cheikh</div>
+              <div>{userName}</div>
             </div>
-            <Link to="/SignIn" className={styles.linkStyle}>
+            <Link to="/Profile" className={styles.linkStyle}>
               <div className={styles.actionButton}>Profile</div>
             </Link>
-            <Link to="/SignIn" className={styles.linkStyle}>
-              <div className={styles.actionButton}>Sign In</div>
-            </Link>
-            <Link to="/SignIn" className={styles.linkStyle}>
+            {closeSignIn == true ? (
+              <Link to="/SignIn" className={styles.linkStyle}>
+                <div className={styles.actionButton}>Sign In</div>
+              </Link>
+            ) : null}
+            <Link to="/Cart" className={styles.linkStyle}>
               <div className={styles.actionButton}>Cart</div>
             </Link>
-            <Link to="/SignIn" className={styles.linkStyle}>
-              <div className={styles.actionButton}>Privacy and condition</div>
-            </Link>
+            {/* <Link to="/SignIn" className={styles.linkStyle}> */}
+            <div className={styles.actionButton}>Privacy and condition</div>
+            {/* </Link> */}
           </div>
           <div className={styles.sideMenuBottom}>
             <div className={styles.actionButton}>Logout</div>

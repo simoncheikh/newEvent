@@ -5,9 +5,28 @@ import { ListSearch } from "./ListSearch";
 
 export const SearchInput = ({ width }) => {
   const [inputText, setInputText] = useState("");
-  const inputRef = useRef(null);
+  const [event, setEvent] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  let inputHandler = (e) => {
+  const getEvent = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/event_getAll", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setEvent(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      setLoading(false);
+    }
+  };
+
+  const inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
   };
@@ -16,52 +35,22 @@ export const SearchInput = ({ width }) => {
     function handleOutsideClick(event) {
       setInputText("");
     }
+
     document.addEventListener("mousedown", handleOutsideClick);
+
+    getEvent();
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
-  const searchValue = [
-    {
-      id: 1,
-      text: "VIRTUAL SOFTWARE DEVELOPMENT CONFERENCE",
-      image: require("../assets/Party.jpg"),
-    },
-    {
-      id: 2,
-      text: "VIRTUAL SOFTWARE DEVELOPMENT CONFERENCE",
-      image: require("../assets/Event1.jpeg"),
-    },
-    {
-      id: 3,
-      text: "VIRTUAL SOFTWARE DEVELOPMENT CONFERENCE",
-      image: require("../assets/POSTER.jpeg"),
-    },
-    {
-      id: 4,
-      text: "VIRTUAL SOFTWARE DEVELOPMENT CONFERENCE",
-      image: require("../assets/POSTER.jpeg"),
-    },
-    {
-      id: 5,
-      text: "VIRTUAL SOFTWARE DEVELOPMENT CONFERENCE",
-      image: require("../assets/POSTER.jpeg"),
-    },
-    {
-      id: 6,
-      text: "Party",
-      image: require("../assets/POSTER.jpeg"),
-    },
-  ];
-
-  const filteredSearchValue = searchValue.filter((item) =>
-    item.text.toLowerCase().includes(inputText)
+  const filteredSearchValue = event.filter((item) =>
+    (item.eventName?.toLowerCase() || "").includes(inputText)
   );
 
   return (
-    <div className={styles.main} >
+    <div className={styles.main}>
       <div className={styles.search}>
         <TextField
           id="outlined-basic"
@@ -71,7 +60,9 @@ export const SearchInput = ({ width }) => {
           label="Search"
         />
         <div className={styles.listSearchStyle}>
-          {inputText ? <ListSearch data={filteredSearchValue} /> : null}
+          {inputText && !loading ? (
+            <ListSearch data={filteredSearchValue} />
+          ) : null}
         </div>
       </div>
     </div>

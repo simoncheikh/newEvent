@@ -1,0 +1,21 @@
+/*profile.module.css*/
+
+.topBarStyle {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: fit-content;
+}
+.profileMainPage {
+  padding: 1%;
+}
+.welcome {
+  color: #161855;
+  /* width: 100%; */
+  border-bottom: #161855 solid 1px;
+  padding: 1%;
+}
+.profileActions{
+    justify-content: space-around;
+    display: flex;
+}

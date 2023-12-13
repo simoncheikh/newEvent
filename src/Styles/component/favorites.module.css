@@ -1,0 +1,5 @@
+/*favorites.module.css*/
+.mainFavorites {
+  margin-top: 5%;
+  flex-wrap: wrap;
+}

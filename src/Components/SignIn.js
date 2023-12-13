@@ -2,62 +2,92 @@ import styles from "../Styles/component/signIn.module.css";
 import { useContext, useState, useEffect, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { FormDialogue } from "./FormDialogue";
-import { Dropdown } from "./Dropdown";
+import { Warning } from "./Warning";
 // import { Dropdown } from "./Dropdown";
 
 export const SignIn = () => {
-  const [userLogin, setUserLogin] = useState({ Email: "", password: "" });
+  const [userLogin, setUserLogin] = useState({ email: "", password: "" });
   const [newUser, setNewUser] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
   const [openDialogue, setOpenDialogue] = useState(false);
+  const [warningText, setWarningText] = useState({});
 
-  const typeOptions = [{ value: "dsad", label: "Dsadsa" }];
-  // const navigate = useNavigate();
-  // const location = useLocation();
+  const navigate = useNavigate();
 
-  // const checkUser = async () => {
-  //     try {
-  //         const response = await fetch("http://localhost:3000/login", {
-  //             method: "POST",
-  //             body: JSON.stringify(userLogin),
-  //             headers: {
-  //                 Accept: "application/json",
-  //                 "Content-Type": "application/json",
-  //             },
-  //         });
-  //         const data = await response.json();
-  //         navigate("/userData", { state: data });
-  //     } catch (error) {
-  //         console.log(error.message);
-  //     }
-  //     setUserLogin({ Email: "", password: "" });
-  // };
+  const createUser = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/signUp/User", {
+        method: "POST",
+        body: JSON.stringify(newUser),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      setWarningText({ severity: "success", label: "user has been insert" });
+      setNewUser([]);
+    } catch (error) {
+      setWarningText({ severity: "error", label: error.message });
+    }
+    setOpenDialogue(false);
+    setShowAlert(true);
+  };
 
-  // const createUser = async () => {
-  //     try {
-  //         const response = await fetch('http://localhost:3000/signup', {
-  //             method: "POST",
-  //             body: JSON.stringify(newUser),
-  //             headers: {
-  //                 Accept: "application/json",
-  //                 "Content-Type": "application/json",
-  //             },
-  //         });
-  //         const data = await response.json()
-  //     } catch (error) {
-  //         window.alert(error.message)
-  //     }
-  //     setOpenDialogue(false)
-  // }
+  const checkUser = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/login/user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userLogin),
+        credentials: "include",
+      });
 
-  // const typeOptions=[
-  //     {value:'admin',label:"Admin"},
-  //     {value:'user',label:"User"},
-  // ]
+      if (response.ok) {
+        const data = await response.json();
+        const userInfo = data.user;
+        const { email, firstname, lastName, userID, type } = userInfo;
+        navigate("/", {
+          state: {
+            userID: userID,
+            type: type,
+            firstName: firstname,
+            lastName: lastName,
+          },
+        });
+        setWarningText({
+          severity: "success",
+          label: `Logged in as ${email}, ${firstname}`,
+        });
+        setShowAlert(true);
+      } else {
+        const errorData = await response.json();
+        setWarningText({ severity: "error", label: errorData.error });
+        setShowAlert(true);
+      }
+    } catch (error) {
+      setWarningText({ severity: "error", label: error.message });
+      setShowAlert(true);
+    }
+  };
+
 
   return (
     <div className={styles.mainSignin}>
+      <div className={styles.topBarStyle}>
+        <Warning
+          onClick={() => setShowAlert(false)}
+          collapseIn={showAlert}
+          alertProps={warningText}
+        />
+      </div>
       <div className={styles.leftSigninPage}>
         <div className={styles.signinTitle}>Login To Your Account</div>
         <div className={styles.inputAll}>
@@ -65,21 +95,22 @@ export const SignIn = () => {
             <TextField
               label="Email"
               style={{ width: "20em", borderRadius: "4%" }}
-              // onChange={(e) => {
-              //     setUserLogin({ ...userLogin, Email: e.target.value })
-              // }}
+              onChange={(e) => {
+                setUserLogin({ ...userLogin, email: e.target.value });
+              }}
             />
           </div>
           <div className={styles.inputPassword}>
             <TextField
               label="Password"
               style={{ width: "20em" }}
-              // onChange={(e) => setUserLogin({ ...userLogin, password: e.target.value })}
+              onChange={(e) =>
+                setUserLogin({ ...userLogin, password: e.target.value })
+              }
               type="password"
             />
           </div>
         </div>
-
         <div className={styles.signinButton}>
           <Button
             variant="contained"
@@ -89,9 +120,7 @@ export const SignIn = () => {
               fontWeight: "bold",
               width: "15em",
             }}
-            // onClick={() => {
-            //     checkUser()
-            // }}
+            onClick={checkUser}
           >
             Sign In
           </Button>
@@ -118,6 +147,7 @@ export const SignIn = () => {
               Sign Up
             </Button>
           </div>
+          <div className={styles.powered}>Powered © By Lebanon Luxe Events</div>
         </div>
         <FormDialogue
           show={openDialogue}
@@ -126,7 +156,7 @@ export const SignIn = () => {
           onClose={() => setOpenDialogue(false)}
           titleStyle={{ height: "1000px" }}
           fullwidth={"100%"}
-          //   onAccept={createUser}
+          onAccept={createUser}
         >
           <div>
             <img
@@ -137,10 +167,33 @@ export const SignIn = () => {
           <div className={styles.dialogueContainer}>
             <TextField
               variant="outlined"
-              label="Email"
-              // onChange={(e) => setNewUser({ ...newUser, Email: e.target.value })}
-              value={newUser.Email || ""}
+              label="First Name"
+              onChange={(e) =>
+                setNewUser({ ...newUser, firstName: e.target.value })
+              }
+              value={newUser.firstName || ""}
               size="small"
+              fullWidth
+            />
+            <TextField
+              variant="outlined"
+              label="Last Name"
+              onChange={(e) =>
+                setNewUser({ ...newUser, lastName: e.target.value })
+              }
+              value={newUser.lastName || ""}
+              size="small"
+              fullWidth
+            />
+            <TextField
+              variant="outlined"
+              label="Email"
+              onChange={(e) =>
+                setNewUser({ ...newUser, email: e.target.value })
+              }
+              value={newUser.email || ""}
+              size="small"
+              fullWidth
             />
             <TextField
               variant="outlined"
@@ -151,6 +204,7 @@ export const SignIn = () => {
               }
               value={newUser.password || ""}
               size="small"
+              fullWidth
             />
             <TextField
               variant="outlined"
@@ -160,25 +214,20 @@ export const SignIn = () => {
               }
               value={newUser.userName || ""}
               size="small"
+              fullWidth
             />
             <TextField
               variant="outlined"
               label="Phone Number"
               onChange={(e) =>
-                setNewUser({ ...newUser, phone: e.target.value })
+                setNewUser({ ...newUser, phoneNumber: e.target.value })
               }
-              value={newUser.phone || ""}
+              value={newUser.phoneNumber || ""}
               size="small"
-            />
-            <Dropdown
-              placeholder="Gender"
-              //   onChange={(value) => setNewUser({ ...newUser, type: value })}
-              //   value={newUser.type}
-              //   options={typeOptions}
+              fullWidth
             />
           </div>
         </FormDialogue>
-        <div className={styles.powered}>Powered © By Lebanon Luxe Events</div>
       </div>
     </div>
   );

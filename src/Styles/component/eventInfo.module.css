@@ -52,6 +52,7 @@
   display: flex;
   width: 50%;
   gap: 40px;
+  align-items: center;
 }
 .increaseDecreaseButton {
   display: flex;
@@ -117,19 +118,43 @@
   color: white;
   font-weight: bold;
 }
-.mainCheckout{
-    display: flex;
-    justify-content: end;
-    gap: 10px;
+.mainCheckout {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
 }
 .checkoutButton {
   color: #161855;
-  border:#161855 solid 1px;
+  border: #161855 solid 1px;
   font-weight: bold;
   width: 13%;
   height: 6vh;
 }
 .checkoutButton:hover {
   color: white;
-  border:white solid 1px;
+  border: white solid 1px;
+}
+.ticketsLeft {
+  font-size: large;
+  color: white;
+}
+.mainPrice {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+  
+}
+.price {
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+}
+.topBarStyle{
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: fit-content;
 }

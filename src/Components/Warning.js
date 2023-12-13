@@ -7,11 +7,12 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 
-export const Warning = ({ label, onClick, collapseIn }) => {
-
+export const Warning = ({ onClick, collapseIn, alertProps }) => {
+  const { severity, label } = alertProps;
   return (
     <Collapse in={collapseIn}>
       <Alert
+        severity={severity}
         action={
           <IconButton
             aria-label="close"

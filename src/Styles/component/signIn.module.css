@@ -3,7 +3,7 @@
 .mainSignin {
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 .leftSigninPage {
@@ -11,7 +11,6 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  height: 41em;
   width: 60%;
 }
 .inputAll {
@@ -32,15 +31,14 @@
 .rightSigninPage {
   background-color: #161855;
   width: 40%;
-  height: 41em;
 }
 
 .mainRightPage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  height: 38em;
+  height: 100%;
+  gap: 20%;
 }
 .titleRightPage {
   font-size: 2em;
@@ -54,18 +52,30 @@
   font-size: 1em;
   color: white;
   justify-content: space-evenly;
-  height: 10em;
+  margin-top: 60%;
 }
 .powered {
   font-size: 13px;
   color: white;
   align-items: center;
   text-align: center;
-  margin-bottom: 14em;
 }
 .dialogueContainer {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 10px;
+}
+.signUpRow{
+  display: flex;
+  gap: 20px;
+}
+.topBarStyle{
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: fit-content;
+}
+.logo{
+  width: 40%;
 }

@@ -1,0 +1,13 @@
+/*myAccount.module.css*/
+.mainAccount{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 5%;
+    gap: 30px;
+}
+.accountRow{
+    display: flex;
+    justify-content:space-between ;
+
+}

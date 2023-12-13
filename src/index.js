@@ -8,6 +8,9 @@ import { EventPage } from "./Pages/EventPage";
 import { SignIn } from "./Components/SignIn";
 import { EventInfo } from "./Components/EventInfo";
 import { AddEvent } from "./Pages/AddEvent";
+import { Cart } from "./Pages/Cart";
+import { CheckOut } from "./Pages/CheckOut";
+import { Profile } from "./Pages/Profile";
 
 ReactDOM.render(
   <Router>
@@ -18,6 +21,9 @@ ReactDOM.render(
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/EventInfo" element={<EventInfo />} />
         <Route path="/AddEvent" element={<AddEvent />} />
+        <Route path="/Cart" element={<Cart />} />
+        <Route path="/CheckOut" element={<CheckOut />} />
+        <Route path="/Profile" element={<Profile />} />
       </Routes>
     </React.StrictMode>
   </Router>,
