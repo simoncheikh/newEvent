@@ -2,4 +2,11 @@
 .mainFavorites {
   margin-top: 5%;
   flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+}
+@media only screen and (max-width: 600px) {
+  .mainFavorites {
+    flex-direction: column;
+  }
 }

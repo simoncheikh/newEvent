@@ -7,6 +7,7 @@ export const SearchInput = ({ width }) => {
   const [inputText, setInputText] = useState("");
   const [event, setEvent] = useState([]);
   const [loading, setLoading] = useState(true);
+  const listSearchRef = useRef(null);
 
   const getEvent = async () => {
     try {
@@ -33,7 +34,9 @@ export const SearchInput = ({ width }) => {
 
   useEffect(() => {
     function handleOutsideClick(event) {
-      setInputText("");
+      if (listSearchRef.current && !listSearchRef.current.contains(event.target)) {
+        setInputText("");
+      }
     }
 
     document.addEventListener("mousedown", handleOutsideClick);
@@ -59,7 +62,7 @@ export const SearchInput = ({ width }) => {
           fullWidth
           label="Search"
         />
-        <div className={styles.listSearchStyle}>
+        <div className={styles.listSearchStyle} ref={listSearchRef}>
           {inputText && !loading ? (
             <ListSearch data={filteredSearchValue} />
           ) : null}

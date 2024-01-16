@@ -11,7 +11,16 @@
   display: flex;
   justify-content: space-between;
 }
-.updateButton{
-    display: flex;
-    justify-content: end;
+.updateButton {
+  display: flex;
+  justify-content: end;
+}
+@media only screen and (max-width: 600px) {
+  .mainAccount {
+    gap: 10px;
+  }
+  .accountRow {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

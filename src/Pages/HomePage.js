@@ -6,7 +6,8 @@ import { EventCard } from "../Components/EventCard";
 import { DownBar } from "../Components/DownBar";
 import Carousel from "@itseasy21/react-elastic-carousel";
 import { Warning } from "../Components/Warning";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 const breakPoints = [
   { width: 1050, itemsToShow: 1 },
@@ -19,19 +20,42 @@ export const HomePage = () => {
   const [image, setImage] = useState([]);
   const [event, setEvent] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
-
-  // const location = useLocation();
-  // const { state } = location;
-  // const { userID, type, firstName, lastName } = state || {};
+  const [warningText, setWarningText] = useState({});
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/get-user-info", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.error) {
+          console.error("Error fetching userID:", data.error);
+        } else {
+          setUserData(data.userID);
+        }
+      } catch (error) {
+        console.error("Error fetching userID:", error);
+      }
+    };
+    fetchData();
     getEvent();
-    getImage();
   }, []);
 
   const getEvent = async () => {
     try {
-      const response = await fetch("http://localhost:3001/event_getAll", {
+      const response = await fetch("http://localhost:3001/event_promoted", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -45,23 +69,6 @@ export const HomePage = () => {
     }
   };
 
-  const getImage = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/image", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setImage(data.map((value) => value.homeImage));
-    } catch (error) {
-      console.error("Error fetching images:", error);
-    }
-  };
-  
-
   const insertFavEvent = async (eventID, userID) => {
     try {
       const response = await fetch("http://localhost:3001/profile/fav-event", {
@@ -72,39 +79,74 @@ export const HomePage = () => {
         },
         body: JSON.stringify({
           eventID: eventID,
-          userID: userID,
+          userID: userData,
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 409) {
+          setWarningText({
+            severity: "warning",
+            label: "Favorite event already exists",
+          });
+        } else if(response.status==400){
+          setWarningText({
+            severity: "warning",
+            label: "Login First",
+          });
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+      } else {
+        const data = await response.json();
+      
+        if (data.success) {
+          setWarningText({
+            severity: "success",
+            label: "Favorite event inserted successfully",
+          });
+        } else {
+          setWarningText({
+            severity: "warning",
+            label: "Unexpected response from the server",
+          });
+        }
       }
-
-      const data = await response.json();
-      console.log("Favorite event inserted successfully:", data);
-      setShowAlert(true);
     } catch (error) {
-      console.error("Error inserting favorite event:", error);
+      setWarningText({
+        severity: "error",
+        label: error.message,
+      });
     }
+    setShowAlert(true);
   };
 
   const originalDate = (formattedDate) => {
     const date = new Date(`${formattedDate}`);
     return date.toDateString();
   };
+  const { authenticated, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.type == null && !user) {
+      navigate("/");
+    } else if (user.type == 3 && user && authenticated) {
+      navigate("/");
+    } else {
+      navigate("/SignIn");
+    }
+  }, [authenticated, user, navigate]);
 
   return (
     <div className={styles.mainPageContainer}>
       <div className={styles.TopBarPosition}>
-        <TopBar
-          // closeSignIn={userID == null ? true : false}
-          // userName={`${firstName} ${lastName}`}
-        />
-        {/* <Warning
-          label="Favorite event inserted successfully"
+        <TopBar />
+        <Warning
           onClick={() => setShowAlert(false)}
           collapseIn={showAlert}
-        /> */}
+          alertProps={warningText}
+        />
       </div>
       <br></br>
       <br></br>
@@ -117,20 +159,17 @@ export const HomePage = () => {
             Lebanon Luxe Events: Discover, Experience, Repeat
           </h1>
           <h3 className={styles.mainEventDescription}>
-            Discover the ultimate destination for all things events! Our event
-            website is your go-to platform for exploring, planning, and
-            attending a wide variety of events that cater to every interest and
-            passion.
+            Uncover the ultimate destination for all your event desires! Our
+            website is where you can easily explore, plan, and enjoy exciting
+            happenings that match your interests and passions.
           </h3>
         </div>
         <div className={styles.imageContainer}>
-          {image.length > 0 && (
-            <img
-              src={require(`../assets/${image[0]}`)}
-              className={styles.imageView}
-              alt="Event Image"
-            />
-          )}
+          <img
+            src={require("../assets/Party.jpg")}
+            className={styles.imageView}
+            alt="Event Image"
+          />
         </div>
       </div>
       <div>

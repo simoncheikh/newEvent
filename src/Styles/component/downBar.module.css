@@ -8,3 +8,14 @@
 .sponsorImage {
   height: 10.6vh;
 }
+
+@media only screen and (max-width: 600px) {
+  .sponsorImage{
+    width: 60%;
+  }
+  .mainSponsor{
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+  }
+}

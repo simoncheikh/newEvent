@@ -8,9 +8,9 @@ html {
   margin: 0;
   padding: 0;
   font-family: Neue Plak, -apple-system, BlinkMacSystemFont, Roboto,
-  Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
+    Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
 }
-.TopBarPosition{
+.TopBarPosition {
   position: fixed;
   z-index: 2;
   width: 100%;
@@ -81,18 +81,18 @@ html {
   color: #161855;
   text-shadow: none;
 }
-.mainPromotedCards{
+.mainPromotedCards {
   display: flex;
   flex-direction: column;
   gap: 5px;
   margin: 2%;
 }
-.promotedTitle{
+.promotedTitle {
   color: #39364f;
   font-weight: bold;
   font-size: 30px;
 }
-.promotedCard{
+.promotedCard {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -103,15 +103,26 @@ html {
   align-items: center;
   margin-bottom: 2%; */
   width: 100%;
-
 }
 
-
-.arrowBackStyle{
+.arrowBackStyle {
   height: 6vh;
-  box-shadow: 0.5px .5px 2px #000;
+  box-shadow: 0.5px 0.5px 2px #000;
 }
-.arrowForwardStyle{
-  height:6vh;
-  box-shadow: 0.5px .5px 2px #000;
+.arrowForwardStyle {
+  height: 6vh;
+  box-shadow: 0.5px 0.5px 2px #000;
+}
+
+@media only screen and (max-width: 600px) {
+  .imageDescriptionContainer {
+    flex-direction: column; 
+    align-items: center; 
+  }
+  .imageContainer {
+    width: 100%;
+  }
+  .eventDescription {
+    width: 100%;
+  }
 }

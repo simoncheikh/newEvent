@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { SearchInput } from "../Components/SearchInput";
 import { DownBar } from "../Components/DownBar";
 import { Warning } from "../Components/Warning";
+import { useAuth } from "../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const EventPage = () => {
   const [sortByPrice, setSortByPrice] = useState(false);
@@ -13,12 +15,52 @@ export const EventPage = () => {
   const [event, setEvent] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [warningText, setWarningText] = useState({});
+  const [userData, setUserData] = useState(null);
+  const [cardWidth, setCardWidth] = useState("23.8%");
 
   const itemsPerPage = 8;
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/get-user-info", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.error) {
+          console.error("Error fetching userID:", data.error);
+        } else {
+          setUserData(data.userID);
+        }
+      } catch (error) {
+        console.error("Error fetching userID:", error);
+      }
+    };
+    fetchData();
     getEvent();
   }, []);
+  const { authenticated, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.type == null && !user) {
+      return;
+    } else if (user.type == 3 && user && authenticated) {
+      return;
+    } else {
+      navigate("/SignIn");
+    }
+  }, [authenticated, user, navigate]);
 
   const getEvent = async () => {
     try {
@@ -41,7 +83,7 @@ export const EventPage = () => {
     }
   };
 
-  const insertFavEvent = async (eventID, userID) => {
+  const insertFavEvent = async (eventID) => {
     try {
       const response = await fetch("http://localhost:3001/profile/fav-event", {
         method: "POST",
@@ -51,19 +93,39 @@ export const EventPage = () => {
         },
         body: JSON.stringify({
           eventID: eventID,
-          userID: userID,
+          userID: userData,
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+        if (response.status === 409) {
+          setWarningText({
+            severity: "warning",
+            label: "Favorite event already exists",
+          });
+        } else if (response.status == 400) {
+          setWarningText({
+            severity: "warning",
+            label: "Login First",
+          });
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+      } else {
+        const data = await response.json();
 
-      const data = await response.json();
-      setWarningText({
-        severity: "success",
-        label: "Favorite event inserted successfully",
-      });
+        if (data.success) {
+          setWarningText({
+            severity: "success",
+            label: "Favorite event inserted successfully",
+          });
+        } else {
+          setWarningText({
+            severity: "warning",
+            label: "Unexpected response from the server",
+          });
+        }
+      }
     } catch (error) {
       setWarningText({
         severity: "error",
@@ -96,6 +158,22 @@ export const EventPage = () => {
     return date.toDateString();
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 600) {
+        setCardWidth("100%");
+      } else {
+        setCardWidth("23.8%");
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className={`${styles.mainPageEvent} page`}>
       <div className={styles.topBarStyle}>
@@ -111,7 +189,7 @@ export const EventPage = () => {
       <div className={styles.eventPageContainer}>
         <h2>Discover your Events</h2>
         <div className={styles.mainSearchInput}>
-          <SearchInput />
+          <SearchInput className={styles.SearchInput} />
           <Button
             onClick={() => setSortByPrice(!sortByPrice)}
             className={styles.sortBtn}
@@ -134,13 +212,13 @@ export const EventPage = () => {
               }
               image={require(`../assets/${value.eventImage}`)}
               tickets={value.eventTicket + " Tickets"}
-              width={"23.8%"}
+              width={cardWidth}
               marginBottom={"2%"}
               height={"50vh"}
               data={{ eventID: value.eventID }}
               onClick={(e) => {
                 e.preventDefault();
-                insertFavEvent(value.eventID, value.userID);
+                insertFavEvent(value.eventID);
               }}
             />
           ))}

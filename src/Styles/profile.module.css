@@ -19,3 +19,13 @@
     justify-content: space-around;
     display: flex;
 }
+.responsiveProfileActions{
+  display: flex;
+  gap: 10px;
+}
+@media only screen and (max-width: 600px) {
+  .profileActions{
+    flex-direction: column;
+    gap: 20px;
+  }
+}

@@ -8,17 +8,19 @@ import DoneIcon from "@mui/icons-material/Done";
 import { Button, IconButton } from "@mui/material";
 import { FormDialogue } from "../Components/FormDialogue";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Warning } from "../Components/Warning";
 import AlertDialog from "../Components/Dialog";
+import { useAuth } from "../AuthContext";
 
 export const Cart = () => {
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [deleteDialogStates, setDeleteDialogStates] = useState({});
   const [cartEvent, setCartEvent] = useState([]);
   const [usersID, setUsersID] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [numberTicket, setNumberTicket] = useState(1);
+  const [editItemId, setEditItemId] = useState(null);
+  const [numberTicket, setNumberTicket] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [warningText, setWarningText] = useState({});
 
@@ -53,9 +55,26 @@ export const Cart = () => {
     fetchData();
   }, []);
 
+  const { authenticated, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.type == null && !user) {
+      return;
+    } else if (user.type == 3 && user && authenticated) {
+      return;
+    } else {
+      navigate("/SignIn");
+    }
+  }, [authenticated, user, navigate]);
+
   useEffect(() => {
     if (editMode && cartEvent.length > 0) {
-      setNumberTicket(cartEvent[0].orderQuantity);
+      const initialQuantities = {};
+      cartEvent.forEach((item) => {
+        initialQuantities[item.order_detailsID] = item.orderQuantity;
+      });
+      setNumberTicket(initialQuantities);
     }
   }, [editMode, cartEvent]);
 
@@ -78,6 +97,8 @@ export const Cart = () => {
     }
   };
 
+  console.log(cartEvent[0]?.eventID);
+
   const editQuantity = async (orderDetailsID) => {
     try {
       const response = await fetch(
@@ -88,7 +109,7 @@ export const Cart = () => {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ orderQuantity: numberTicket }),
+          body: JSON.stringify({ orderQuantity: numberTicket[orderDetailsID] }),
         }
       );
 
@@ -99,8 +120,9 @@ export const Cart = () => {
           severity: "success",
           label: "Cart updated successfully.",
         });
-        setShowEditDialog(false);
+        setShowDialog(false);
         setEditMode(false);
+        setEditItemId(null);
       } else {
         const errorData = await response.json();
         setWarningText({ severity: "error", label: errorData.error });
@@ -110,7 +132,6 @@ export const Cart = () => {
     }
     setShowAlert(true);
   };
-
   const deleteQuantity = async (orderDetailsID) => {
     try {
       const response = await fetch(
@@ -130,7 +151,7 @@ export const Cart = () => {
           severity: "success",
           label: "Cart Deleted successfully.",
         });
-        setShowDeleteDialog(false);
+        setShowDialog(false);
         setEditMode(false);
       } else {
         const errorData = await response.json();
@@ -141,6 +162,28 @@ export const Cart = () => {
     }
     setShowAlert(true);
   };
+  const handleEditMode = (orderDetailsID) => {
+    setEditMode(true);
+    setEditItemId(orderDetailsID);
+    setNumberTicket((prev) => ({
+      ...prev,
+      [orderDetailsID]:
+        cartEvent.find((item) => item.order_detailsID === orderDetailsID)
+          ?.orderQuantity || 1,
+    }));
+  };
+  const openDeleteDialog = (orderDetailsID) => {
+    setDeleteDialogStates((prev) => ({ ...prev, [orderDetailsID]: true }));
+  };
+
+  const closeDeleteDialog = (orderDetailsID) => {
+    setDeleteDialogStates((prev) => ({ ...prev, [orderDetailsID]: false }));
+  };
+
+  const totalOrderPrice = cartEvent.reduce(
+    (sum, order) => sum + order.orderTotalPrice,
+    0
+  );
 
   return (
     <div>
@@ -160,26 +203,37 @@ export const Cart = () => {
         <div className={styles.mainCartRow}>
           {cartEvent.map((value) => (
             <div className={styles.cartRow} key={value.eventID}>
-              {/* <img src={require(`../assets/${value.}`).image} className={styles.eventImage} /> */}
               <div className={styles.eventName}>{value.orderName}</div>
-              {editMode == true ? (
+              {editMode && editItemId === value.order_detailsID ? (
                 <div className={styles.increaseDecreaseButton}>
                   <button
                     type="submit"
                     className={styles.increaseButton}
-                    onClick={() => setNumberTicket((prev) => prev + 1)}
+                    onClick={() =>
+                      setNumberTicket((prev) => ({
+                        ...prev,
+                        [value.order_detailsID]:
+                          (prev[value.order_detailsID] || 0) + 1,
+                      }))
+                    }
                   >
                     <div className={styles.plusButton}>+</div>
                   </button>
                   <div type="number" className={styles.inputNumber}>
-                    {numberTicket}
+                    {numberTicket[value.order_detailsID]}
                   </div>
                   <button
                     type="submit"
-                    disabled={numberTicket === 1}
+                    disabled={numberTicket[value.order_detailsID] === 1}
                     className={styles.decreaseButton}
                     onClick={() =>
-                      setNumberTicket((prev) => Math.max(prev - 1, 1))
+                      setNumberTicket((prev) => ({
+                        ...prev,
+                        [value.order_detailsID]: Math.max(
+                          prev[value.order_detailsID] - 1,
+                          1
+                        ),
+                      }))
                     }
                   >
                     <div className={styles.minusButton}>-</div>
@@ -190,69 +244,82 @@ export const Cart = () => {
                   x{value.orderQuantity}
                 </div>
               )}
+
               <div className={styles.eventPrice}>{value.orderPrice}$</div>
               <div className={styles.eventTotal}>{value.orderTotalPrice}$</div>
               <div>
-                <IconButton onClick={() => setEditMode(true)}>
+                <IconButton
+                  onClick={() => {
+                    handleEditMode(value.order_detailsID);
+                  }}
+                >
                   <ModeEditIcon />
                 </IconButton>
-                <IconButton onClick={() => setShowDeleteDialog(true)}>
+                <IconButton
+                  onClick={() => {
+                    openDeleteDialog(value.order_detailsID);
+                  }}
+                >
                   <DeleteIcon />
                 </IconButton>
-
-                {editMode == true && (
+                <AlertDialog
+                  description={`Are you sure you want to Delete ${value.orderName}`}
+                  title={"Delete Order"}
+                  acceptLabel={"Confirm"}
+                  closeLabel={"Cancel"}
+                  CloseOnClick={() => closeDeleteDialog(value.order_detailsID)}
+                  AcceptOnClick={() => deleteQuantity(value.order_detailsID)}
+                  open={deleteDialogStates[value.order_detailsID] || false}
+                />
+                {editMode && editItemId === value.order_detailsID && (
                   <>
                     <IconButton onClick={() => setEditMode(false)}>
                       <CloseIcon />
                     </IconButton>
-                    <IconButton onClick={() => setShowEditDialog(true)}>
+                    <IconButton onClick={() => setShowDialog(true)}>
                       <DoneIcon />
                     </IconButton>
+                    <AlertDialog
+                      description={"Are you sure you want to edit?"}
+                      title={"Edit Quantity"}
+                      acceptLabel={"Confirm"}
+                      closeLabel={"Cancel"}
+                      CloseOnClick={() => setShowDialog(false)}
+                      AcceptOnClick={() => editQuantity(value.order_detailsID)}
+                      open={showDialog}
+                    />
                   </>
                 )}
               </div>
             </div>
           ))}
-          <AlertDialog
-            description={`Are you sure you want to delete ${value.orderName} ?`}
-            title={"Delete order"}
-            acceptLabel={"Confirm"}
-            closeLabel={"Cancel"}
-            CloseOnClick={() => setShowDeleteDialog(false)}
-            AcceptOnClick={() => deleteQuantity(value.order_detailsID)}
-            open={showDeleteDialog}
-          />
-          <AlertDialog
-            description={"Are you sure you want to edit?"}
-            title={"Edit Quantity"}
-            acceptLabel={"Confirm"}
-            closeLabel={"Cancel"}
-            CloseOnClick={() => setShowEditDialog(false)}
-            AcceptOnClick={() => editQuantity(value.order_detailsID)}
-            open={showEditDialog}
-          />
         </div>
         <div className={styles.mainCheckout}>
           <div className={styles.checkoutRow}>
-            <div className={styles.checkoutName}>SubTotal:</div>
-            <div>100$</div>
-          </div>
-          <div className={styles.checkoutRow}>
-            <div className={styles.checkoutName}>Sales Taxes{"(11%)"}:</div>
-            <div>100$</div>
-          </div>
-          <div className={styles.checkoutRow}>
             <div className={styles.checkoutName}>Grand Total:</div>
-            <div>100$</div>
+            <div>{totalOrderPrice}$</div>
           </div>
-          <Link to={"/CheckOut"}>
-            <Button variant="contained" color="secondary">
+
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={cartEvent.length == 0 ? true : false}
+          >
+            <Link
+              to={"/CheckOut"}
+              className={styles.linkStyle}
+              state={{
+                orderID: cartEvent[0]?.orderID,
+                userID: usersID,
+                orderQuantity: cartEvent[0]?.orderQuantity,
+                eventID: cartEvent[0]?.eventID,
+              }}
+            >
               Check Out
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
-      {/* <DownBar /> */}
     </div>
   );
 };

@@ -63,3 +63,25 @@
   display: flex;
   justify-content: end;
 }
+.priceLabel{
+  color: #161855;
+  font-size: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .mainAddEvent{
+    font-size: 20px;
+  }
+  .addEventActions{
+    flex-direction: column;
+  }
+  .inputField{
+    width: 100%;
+  }
+  .mainOverview{
+    width: 100%;
+  }
+  .mainScheduling{
+    width: 100%;
+  }
+}

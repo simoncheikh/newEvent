@@ -1,0 +1,46 @@
+/* contact.module.css */
+
+.topBarStyle {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: fit-content;
+}
+
+.mainPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 55vh;
+  width: 80%;
+  margin: auto;
+  margin-top: 100px;
+  border: solid 1px #161855;
+  border-radius: 20px;
+}
+h1 {
+  color: #161855;
+}
+.rowContact {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.sendBtn {
+  color: white;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 40%;
+}
+
+@media only screen and (max-width: 600px) {
+  .sendBtn{
+    width: 70%;
+    border-radius: 5px;
+    margin-bottom: 2%;
+  }
+}

@@ -1,0 +1,62 @@
+/*eventsAdmin.module.css*/
+
+.topBarStyle {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    height: fit-content;
+  }
+  .mainPageContainer {
+    padding: 1%;
+  }
+  .mainTitle {
+    color: #161855;
+  }
+  .dialogueContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+  .mainAddUserBtn {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    margin-bottom: 2%;
+  }
+  .searchBar{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1%;
+  }
+  .addRowContainer{
+    display: flex;
+    gap: 10px;
+  }
+  .nextButton{
+    display: flex;
+    align-items: end;
+  }
+  .payments {
+    color: #39364f;
+  }
+  .mainPayment {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+  }
+  .paymentRow {
+    display: flex;
+    gap: 10px;
+  }
+  .paymentInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  } 
+  .arrowBack{
+    display: flex;
+    justify-content: flex-start;
+    width: 8%;
+  }

@@ -6,9 +6,11 @@ import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Warning = ({ onClick, collapseIn, alertProps }) => {
+export const Warning = ({ onClick, collapseIn, alertProps, labelButton }) => {
   const { severity, label } = alertProps;
+
   return (
     <Collapse in={collapseIn}>
       <Alert
@@ -25,7 +27,12 @@ export const Warning = ({ onClick, collapseIn, alertProps }) => {
         }
         sx={{ mb: 2 }}
       >
-        {label}
+        <div style={{ display: "flex", gap: "10px" }}>
+          {label}
+          <Link to={"/SignIn"}>
+            <div>{labelButton}</div>
+          </Link>
+        </div>
       </Alert>
     </Collapse>
   );

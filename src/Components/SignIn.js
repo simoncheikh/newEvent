@@ -5,7 +5,10 @@ import Button from "@mui/material/Button";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { FormDialogue } from "./FormDialogue";
 import { Warning } from "./Warning";
-// import { Dropdown } from "./Dropdown";
+import { useAuth } from "../AuthContext";
+import { TopBar } from "./TopBar";
+// import { Dropdown } from "./Dropdown"
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const SignIn = () => {
   const [userLogin, setUserLogin] = useState({ email: "", password: "" });
@@ -13,11 +16,34 @@ export const SignIn = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [openDialogue, setOpenDialogue] = useState(false);
   const [warningText, setWarningText] = useState({});
+  const [recaptchaVerified, setRecaptchaVerified] = useState(false);
 
   const navigate = useNavigate();
+  const { login, user, authenticated } = useAuth();
+
+  const passwordRegex =
+    /^(?=.*[A-Z])(?=.*\d)(?=.*[@])[A-Za-z\d@!#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/;
 
   const createUser = async () => {
     try {
+      if (!recaptchaVerified) {
+        setWarningText({
+          severity: "error",
+          label: "Please verify ReCAPTCHA before signing up.",
+        });
+        setShowAlert(true);
+        return;
+      }
+
+      if (!passwordRegex.test(newUser.password)) {
+        setWarningText({
+          severity: "error",
+          label:
+            "Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (@).",
+        });
+        setShowAlert(true);
+        return;
+      }
       const response = await fetch("http://localhost:3001/signUp/User", {
         method: "POST",
         body: JSON.stringify(newUser),
@@ -27,10 +53,18 @@ export const SignIn = () => {
         },
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status === 409) {
+          setWarningText({
+            severity: "warning",
+            label: "Email already exists. Please use a different email.",
+          });
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+      } else {
+        setWarningText({ severity: "success", label: "User has been inserted successfully." });
+        setNewUser([]);
       }
-      setWarningText({ severity: "success", label: "user has been insert" });
-      setNewUser([]);
     } catch (error) {
       setWarningText({ severity: "error", label: error.message });
     }
@@ -39,49 +73,22 @@ export const SignIn = () => {
   };
 
   const checkUser = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/login/user", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userLogin),
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const userInfo = data.user;
-        const { email, firstname, lastName, userID, type } = userInfo;
-        navigate("/", {
-          state: {
-            userID: userID,
-            type: type,
-            firstName: firstname,
-            lastName: lastName,
-          },
-        });
-        setWarningText({
-          severity: "success",
-          label: `Logged in as ${email}, ${firstname}`,
-        });
-        setShowAlert(true);
-      } else {
-        const errorData = await response.json();
-        setWarningText({ severity: "error", label: errorData.error });
-        setShowAlert(true);
-      }
-    } catch (error) {
-      setWarningText({ severity: "error", label: error.message });
-      setShowAlert(true);
-    }
+    login(userLogin, setShowAlert, setWarningText);
   };
 
+  // useEffect(() => {
+  //   if (!authenticated) {
+  //     navigate('/');
+  //   } else if (user && user.type !== 3) {
+  //     console.log(user.type);
+  //     navigate("/SignIn");
+  //   }
+  // }, [authenticated, user, navigate]);
 
   return (
     <div className={styles.mainSignin}>
       <div className={styles.topBarStyle}>
+        <TopBar />
         <Warning
           onClick={() => setShowAlert(false)}
           collapseIn={showAlert}
@@ -187,6 +194,16 @@ export const SignIn = () => {
             />
             <TextField
               variant="outlined"
+              label="Phone Number"
+              onChange={(e) =>
+                setNewUser({ ...newUser, phoneNumber: e.target.value })
+              }
+              value={newUser.phoneNumber || ""}
+              size="small"
+              fullWidth
+            />
+            <TextField
+              variant="outlined"
               label="Email"
               onChange={(e) =>
                 setNewUser({ ...newUser, email: e.target.value })
@@ -216,15 +233,9 @@ export const SignIn = () => {
               size="small"
               fullWidth
             />
-            <TextField
-              variant="outlined"
-              label="Phone Number"
-              onChange={(e) =>
-                setNewUser({ ...newUser, phoneNumber: e.target.value })
-              }
-              value={newUser.phoneNumber || ""}
-              size="small"
-              fullWidth
+            <ReCAPTCHA
+              sitekey="6LcW3EQpAAAAAA9QStjHryWOXCQsB2isDcAiJl14"
+              onChange={(value) => setRecaptchaVerified(!!value)}
             />
           </div>
         </FormDialogue>

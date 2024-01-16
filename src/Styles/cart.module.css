@@ -135,3 +135,22 @@ html {
   color: #161855;
   font-weight: bold;
 }
+.linkStyle {
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .mainCartRow{
+    font-size: 10px;
+  }
+  .cartRow{
+    font-size: 14px;
+    flex-direction: column;
+  }
+  .checkoutRow{
+    width: auto;
+  }
+  .eventName{
+    font-size: 14px;
+  }
+}

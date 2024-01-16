@@ -1,7 +1,7 @@
 /* topBar.module.css */
-body{
+body {
   font-family: Neue Plak, -apple-system, BlinkMacSystemFont, Roboto,
-  Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
+    Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif;
 }
 .mainTopBar {
   background-color: white;
@@ -44,11 +44,28 @@ body{
 .linkStyle {
   text-decoration: none;
 }
-.sideBarStyle{
+.sideBarStyle {
   position: absolute;
   height: 100vh;
-  left:0;
+  left: 0;
   top: 0;
-  width:100%;
+  width: 100%;
 }
-
+@media only screen and (max-width: 600px) {
+  .mainTopBar {
+    padding: 1%;
+    font-size: 20px;
+  }
+  .buttonBar {
+    gap: 58px;
+  }
+}
+@media only screen and (max-width: 430px) {
+  .mainTopBar {
+    padding: 1%;
+    font-size: 15px;
+  }
+  .buttonBar {
+    gap: 20px;
+  }
+}
