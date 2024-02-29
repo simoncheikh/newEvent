@@ -2,11 +2,11 @@
 .mainSponsor {
   background-color: #161855;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 2%;
 }
 .sponsorImage {
-  height: 10.6vh;
+  height: 16.6vh;
 }
 
 @media only screen and (max-width: 600px) {

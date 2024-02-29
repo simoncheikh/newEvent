@@ -209,7 +209,9 @@ export const EventInfo = () => {
                     })
                   : orderEvent();
               }}
-              disabled={oneEvent.eventTicket == 0 ? true : false}
+              disabled={
+                oneEvent.eventTicket == 0 || numberTicket == 0 ? true : false
+              }
             >
               Add To Cart
             </Button>

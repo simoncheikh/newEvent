@@ -31,7 +31,9 @@ export const Events = () => {
   const [reqImage, setReqImage] = useState([]);
   const [userAll, setUserAll] = useState([]);
   const [user, setUser] = useState(null);
-
+  const [imageData, setImageData] = useState([]);
+  const [imageID, setImageID] = useState(null);
+  const [openImageDialog, setOpenImageDialog] = useState(false);
 
   const promoted = [
     { value: 0, label: "Not Promoted" },
@@ -145,26 +147,27 @@ export const Events = () => {
           hour12: false,
         }
       );
-      const formData = new FormData();
-      Object.entries(editEvent).forEach(([key, value]) => {
-        if (key !== "eventDate" && key !== "eventTime") {
-          formData.append(key, value);
-        }
-      });
-
-      formData.append("eventDate", formattedDate);
-      formData.append("eventTime", formattedTime);
-      formData.append("CreatedDate", new Date().toISOString().split("T")[0]);
-
-      Object.entries(reqImage).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+      // const formData = new FormData();
+      // Object.entries(editEvent).forEach(([key, value]) => {
+      //   if (key !== "eventDate" && key !== "eventTime") {
+      //     formData.append(key, value);
+      //   }
+      // });
 
       const response = await fetch(
         "http://localhost:3001/admin/table_event/updateEvent",
         {
           method: "PATCH",
-          body: formData,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...editEvent,
+            eventTime: formattedTime,
+            eventDate: formattedDate,
+            CreatedDate: new Date().toISOString().split("T")[0],
+          }),
         }
       );
 
@@ -174,8 +177,9 @@ export const Events = () => {
 
       setWarningText({
         severity: "success",
-        label: "Event inserted successfully",
+        label: "Event updated successfully",
       });
+      window.location.reload();
     } catch (error) {
       setWarningText({ severity: "error", label: error.message });
     }
@@ -236,17 +240,48 @@ export const Events = () => {
     setAddEvent([]);
   };
 
+  const updateEventImage = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('eventImage', imageData.eventImage); 
+      formData.append('eventID', imageID); 
+  
+      const response = await fetch(
+        "http://localhost:3001/admin/table_event/updateImage",
+        {
+          method: "PATCH",
+          body: formData,
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+  
+      setWarningText({
+        severity: "success",
+        label: "Event Updated successfully",
+      });
+    } catch (error) {
+      setWarningText({ severity: "error", label: error.message });
+    }
+    setShowAlert(true);
+    setOpenImageDialog(false);
+  };
+
   const deleteUser = async (userID) => {
     try {
       const respond = await fetch(
-        "http://localhost:3001/admin/user_table/delete",
+        "http://localhost:3001/event/admin/delete",
         {
           method: "DELETE",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userID: userID }),
+          body: JSON.stringify({ eventID: userID }),
         }
       );
       setWarningText({
@@ -328,15 +363,18 @@ export const Events = () => {
     {
       field: "Actions",
       headerName: "Actions",
-      width: 170,
+      width: 300,
       renderCell: (params) => (
         <div>
           <IconButton onClick={() => handleEdit(params.row)}>
             <ModeEditIcon />
           </IconButton>
-          <IconButton onClick={() => handleDelete(params.row?.userID)}>
+          <IconButton onClick={() => handleDelete(params.row?.eventID)}>
             <DeleteIcon />
           </IconButton>
+          <Button onClick={() => handleImage(params.row?.eventID)}>
+            Update Image
+          </Button>
         </div>
       ),
     },
@@ -357,14 +395,18 @@ export const Events = () => {
       eventLocation: row.eventLocation,
       eventLocationLink: row.eventLocationLink,
       eventDate: row.eventDate,
-      eventTime: row.eventTime,
+      eventTime: dayjs(row.eventTime, "HH:mm:ss").toDate(),
       eventTicket: row.eventTicket,
       Promoted: promoted.find((g) => g.value === row.Promoted)?.value,
       userID: userAll.find((r) => r.userName == row.userID)?.userID,
-      eventImage: row.eventImage,
     });
 
     setOpenDialog(true);
+  };
+
+  const handleImage = (eventID) => {
+    setOpenImageDialog(true);
+    setImageID(eventID);
   };
 
   const filteredRows = eventData.filter((event) => {
@@ -578,7 +620,7 @@ export const Events = () => {
                 nullable
               />
             </div>
-            <div
+            {/* <div
               className={styles.addRowContainer}
               style={{ justifyContent: "space-between" }}
             >
@@ -594,7 +636,7 @@ export const Events = () => {
                 }}
                 fileName={editEvent.eventImage?.name || ""}
               />
-            </div>
+            </div> */}
           </>
         </div>
       </FormDialogue>
@@ -819,13 +861,40 @@ export const Events = () => {
             </div> */}
         </div>
       </FormDialogue>
+      <FormDialogue
+        show={openImageDialog}
+        acceptLabel={"Save"}
+        dialogueTitle={"Update Event"}
+        onClose={() => setOpenImageDialog(false)}
+        titleStyle={{ height: "100px" }}
+        fullwidth={"100%"}
+        onAccept={updateEventImage}
+      >
+        <div
+          className={styles.addRowContainer}
+          style={{ justifyContent: "center" }}
+        >
+          <InputFile
+            onChange={(event) => {
+              const file = event.target.files[0];
+              if (file) {
+                setImageData({
+                  ...imageData,
+                  eventImage: file,
+                });
+              }
+            }}
+            fileName={imageData.eventImage?.name || ""}
+          />
+        </div>
+      </FormDialogue>
       <AlertDialog
         open={openDeleteDialog}
         AcceptOnClick={() => deleteUser(deleteUserID)}
         acceptLabel={"Confirm"}
         closeLabel={"Close"}
         description={"Are you sure you want to Delete?"}
-        title={"Delete User"}
+        title={"Delete Event"}
         CloseOnClick={() => setOpenDeleteDialog(false)}
       />
     </div>

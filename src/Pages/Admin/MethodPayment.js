@@ -76,7 +76,7 @@ export const MethodPayment = () => {
     { value: 2, label: "MASTER CARD" },
   ];
 
-  const paymentFor = [{ value: 3, label: "Ticket" }];
+  const paymentFor = [{ value: 1, label: "Ticket" }];
 
   const months = [
     { value: "01", label: "01" },

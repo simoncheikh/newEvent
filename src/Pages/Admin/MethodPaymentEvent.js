@@ -30,8 +30,8 @@ export const MethodPaymentEvent = ({ setWarningText, setShowAlert }) => {
   const [user, setUser] = useState(null);
 
   const paymentFor = [
-    { value: 1, label: "No Promoted Event" },
-    { value: 2, label: "Promoted Event" },
+    { value: 2, label: "No Promoted Event" },
+    { value: 3, label: "Promoted Event" },
   ];
 
   useEffect(() => {

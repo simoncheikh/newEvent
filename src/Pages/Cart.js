@@ -23,6 +23,7 @@ export const Cart = () => {
   const [numberTicket, setNumberTicket] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [warningText, setWarningText] = useState({});
+  const [eventData, setEventData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +54,7 @@ export const Cart = () => {
       }
     };
     fetchData();
+    getAllEvent();
   }, []);
 
   const { authenticated, user } = useAuth();
@@ -97,7 +99,24 @@ export const Cart = () => {
     }
   };
 
-  console.log(cartEvent[0]?.eventID);
+  const getAllEvent = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/event_getAll`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setEventData(data);
+    } catch (error) {
+      setWarningText({
+        severity: "error",
+        label: error.message,
+      });
+    }
+  };
 
   const editQuantity = async (orderDetailsID) => {
     try {
@@ -185,6 +204,27 @@ export const Cart = () => {
     0
   );
 
+  const totalQuantity = eventData.find((value) =>
+    cartEvent.some((event) => event.eventID === value.eventID)
+  )?.eventTicket;
+
+  const increaseQuantity = (orderDetailsID) => {
+    setNumberTicket((prev) => ({
+      ...prev,
+      [orderDetailsID]: Math.min(
+        (prev[orderDetailsID] || 0) + 1,
+        totalQuantity || 1
+      ),
+    }));
+  };
+
+  const decreaseQuantity = (orderDetailsID) => {
+    setNumberTicket((prev) => ({
+      ...prev,
+      [orderDetailsID]: Math.max((prev[orderDetailsID] || 0) - 1, 1),
+    }));
+  };
+
   return (
     <div>
       <div className={styles.topBarStyle}>
@@ -209,13 +249,7 @@ export const Cart = () => {
                   <button
                     type="submit"
                     className={styles.increaseButton}
-                    onClick={() =>
-                      setNumberTicket((prev) => ({
-                        ...prev,
-                        [value.order_detailsID]:
-                          (prev[value.order_detailsID] || 0) + 1,
-                      }))
-                    }
+                    onClick={() => increaseQuantity(value.order_detailsID)}
                   >
                     <div className={styles.plusButton}>+</div>
                   </button>
@@ -226,15 +260,7 @@ export const Cart = () => {
                     type="submit"
                     disabled={numberTicket[value.order_detailsID] === 1}
                     className={styles.decreaseButton}
-                    onClick={() =>
-                      setNumberTicket((prev) => ({
-                        ...prev,
-                        [value.order_detailsID]: Math.max(
-                          prev[value.order_detailsID] - 1,
-                          1
-                        ),
-                      }))
-                    }
+                    onClick={() => decreaseQuantity(value.order_detailsID)}
                   >
                     <div className={styles.minusButton}>-</div>
                   </button>

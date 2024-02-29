@@ -213,6 +213,9 @@ export const HomeClient = () => {
     setShowAlert(true);
     setOpenImageDialog(false);
   };
+
+  console.log(reqImage)
+
   
 
   const createEvent = async () => {
@@ -239,11 +242,12 @@ export const HomeClient = () => {
       formData.append("eventTime", formattedTime);
       formData.append("CreatedDate", new Date().toISOString().split("T")[0]);
       formData.append("userID", userData);
-      formData.append("Promoted", 0);
+      // formData.append("Promoted", 0);
 
       Object.entries(reqImage).forEach(([key, value]) => {
         formData.append(key, value);
       });
+
 
       const response = await fetch(
         "http://localhost:3001/addevents/createEvent",
@@ -269,17 +273,17 @@ export const HomeClient = () => {
     setAddEvent([]);
   };
 
-  const deleteUser = async (userID) => {
+  const deleteUser = async (eventID) => {
     try {
       const respond = await fetch(
-        "http://localhost:3001/admin/user_table/delete",
+        "http://localhost:3001/event/admin/delete",
         {
           method: "DELETE",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userID: userID }),
+          body: JSON.stringify({ eventID: eventID }),
         }
       );
       setWarningText({
@@ -747,13 +751,13 @@ export const HomeClient = () => {
                   onChange={(event) => {
                     const file = event.target.files[0];
                     if (file) {
-                      setEditEvent({
-                        ...editEvent,
+                      setAddEvent({
+                        ...addEvent,
                         eventImage: file,
                       });
                     }
                   }}
-                  fileName={editEvent.eventImage?.name || ""}
+                  fileName={addEvent.eventImage?.name || ""}
                 />
 
                 <IconButton onClick={() => setNextBtn(true)}>
@@ -966,7 +970,7 @@ export const HomeClient = () => {
         acceptLabel={"Confirm"}
         closeLabel={"Close"}
         description={"Are you sure you want to Delete?"}
-        title={"Delete User"}
+        title={"Delete Event"}
         CloseOnClick={() => setOpenDeleteDialog(false)}
       />
     </div>
