@@ -1,7 +1,7 @@
 {
   "name": "eventweb",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "homepage": "https://simoncheikh.github.io/https---github.com-simoncheikh-EventWeb/",
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
