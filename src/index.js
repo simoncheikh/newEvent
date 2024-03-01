@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Import BrowserRouter
+import { BrowserRouter as Router, Route, Routes,Navigate  } from "react-router-dom"; // Import BrowserRouter
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./AuthContext";
@@ -27,7 +27,7 @@ ReactDOM.render(
     <AuthProvider>
       <React.StrictMode>
         <Routes>
-          <Route path="/newEvent" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/newEvent/event" element={<EventPage />} />
           <Route path="/newEvent/SignIn" element={<SignIn />} />
           <Route path="/newEvent/EventInfo" element={<EventInfo />} />
@@ -41,7 +41,10 @@ ReactDOM.render(
           <Route path="/newEvent/admin/Home" element={<HomeAdmin />} />
           <Route path="/newEvent/admin/users" element={<Users />} />
           <Route path="/newEvent/admin/events" element={<Events />} />
-          <Route path="/newEvent/admin/methodPayment" element={<MethodPayment />} />
+          <Route
+            path="/newEvent/admin/methodPayment"
+            element={<MethodPayment />}
+          />
           <Route path="/newEvent/admin/Order" element={<Order />} />
           <Route path="/newEvent/admin/Receipt" element={<Receipt />} />
           {/*Client*/}
