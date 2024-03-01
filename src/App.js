@@ -7,8 +7,8 @@ function App() {
   return (
     <div>
       <Switch>
-        <Route path="/newEvent/Home" exact component={HomePage} />
-        <Route path="/newEvent/event" exact component={EventPage} />
+        <Route path="/Home" exact component={HomePage} />
+        <Route path="/event" exact component={EventPage} />
       </Switch>
     </div>
   );
